@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <meta name="viewport" content="width=device-width initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+          rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
+          crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+            crossorigin="anonymous"></script>
+    <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #E7DB0BFF">
+        <div class="container-xl">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarSupportedContent"
+                    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page"
+                           th:href="@{/}">MyCINEMA</a>
+                    </li>
+                    <form class="d-flex">
+                        <input class="form-control me-2" type="search" aria-label="Search">
+                        <button class="btn btn-outline-success" type="submit" th:text="#{header.search}">Search</button>
+                    </form>
+
+                          <li sec:authorize="hasRole('ROLE_ADMIN')" class="nav-item dropdown">
+                              <a class="nav-link dropdown-toggle" href="#" id="Admin" role="button"
+                                 data-bs-toggle="dropdown" aria-expanded="false">
+                                  Admin
+                              </a>
+                              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                  <li><a class="dropdown-item" href="/admin/addSession" th:text="#{admin.addSession}"
+                                     >Add session</a></li>
+                              </ul>
+                          </li>
+
+                </ul>
+
+                <ul class="d-flex align-items-end navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/userPage}">
+                            <ul sec:authorize="isAnonymous()" th:text="#{header.greetings.anon}">Greetings</ul>
+                            <div sec:authorize="isAuthenticated()"
+                                 th:text="#{header.greetings.user} + ': ' + ${#authentication.principal.firstName}
+                                    + ' ' + ${#authentication.principal.lastName}">Authenticated
+                                as <span sec:authentication="name"></span></div>
+                        </a>
+                    </li>
+                    <div sec:authorize="isAuthenticated()">
+                        <li class="nav-item">
+                            <a class="dropdown-item" href="/logout"
+                               th:text="#{header.signOut}">
+                                header.signOut</a>
+                        </li>
+                    </div>
+                    <div sec:authorize="isAnonymous()">
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button"
+                               aria-expanded="false" th:text="#{header.signIn}">header.signIn</a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="/login" th:text="#{header.logIn}">header.logIn</a>
+                                </li>
+                                <li><a class="dropdown-item" href="/registration"
+                                       th:text="#{header.signUp}">header.signUp</a>
+                                </li>
+                            </ul>
+                        </li>
+                    </div>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                           data-bs-toggle="dropdown" aria-expanded="false" th:text="${#strings.toUpperCase(#locale.getLanguage())}">
+                            Current language
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" th:href="@{?lang=en}">EN</a></li>
+                            <li><a class="dropdown-item" th:href="@{?lang=ua}">UA</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</head>
+<body>
+</body>
+</html>

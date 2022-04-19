@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>Registration</title>
+</head>
+<div th:insert="header"></div>
+<body class="text-center align-content-center"
+      style="background-color: #7cb5bd">
+<h3 th:text="#{signUp.signUp}">signUp.signUp</h3>
+<form name="registerForm" method="POST" th:action="@{/registration}" th:object="${user}">
+    <div class="input-group mb-3 mx-auto " style="width: 30rem">
+        <span  class="input-group-text"  th:text="#{signUp.firstName}">firstName</span>
+        <input  type="text" class="form-control" id="firstName"  th:field="*{firstName}" name="firstName" aria-label="input"
+                aria-describedby="inputGroup-sizing-default">
+    </div>
+    <div style="color: red" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}">Name error</div>
+
+    <div class="input-group mb-3 mx-auto " style="width: 30rem">
+        <span  class="input-group-text" th:text="#{signUp.lastName}">firstName</span>
+        <input  type="text" class="form-control" id="lastName"  th:field="*{lastName}" name="firstName" aria-label="input"
+                aria-describedby="inputGroup-sizing-default">
+    </div>
+    <div style="color: red" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}">Name error</div>
+
+    <div class="input-group mb-3 mx-auto " style="width: 30rem">
+        <span  class="input-group-text" th:text="#{signUp.email}">firstName</span>
+        <input  type="email" class="form-control" id="email"  th:field="*{email}" name="firstName" aria-label="input"
+                aria-describedby="inputGroup-sizing-default">
+    </div>
+    <div style="color: red" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Name error</div>
+    <div style="color: red" th:if="${emailError}"  th:text="#{signUp.email.identity.error}">Name error</div>
+    <div class="input-group mb-3 mx-auto " style="width: 30rem">
+        <span  class="input-group-text" th:text="#{signUp.password}">firstName</span>
+        <input  type="password" class="form-control" id="password" th:field="*{password}" name="firstName" aria-label="input"
+                aria-describedby="inputGroup-sizing-default">
+    </div>
+    <div style="color: red" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Name error</div>
+
+
+    <button type="submit" class="btn btn-primary" th:text="#{signUp.submit}"></button>
+</form>
+
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <!--  <div class="input-group mb-3 mx-auto " style="width: 30rem">
+        <span  class="input-group-text" id="inputGroup1" th:text="#{signUp.lastName}">lastName</span>
+        <input  type="text" class="form-control" name="lastName" value=""  aria-label="input"
+                aria-describedby="inputGroup-sizing-default">
+    </div>
+    <div class="text-danger">
+        <c:if test="${temp.signUpDataError == true}">
+            <p>
+                <fmt:message key="signUp.name.info"/>
+            </p>
+        </c:if>
+    </div>
+    <div class="input-group mb-3 mx-auto " style="width: 30rem">
+        <span  class="input-group-text" id="inputGroup2"><fmt:message key="signUp.email"/></span>
+        <input  type="email" class="form-control" name="email" value="" aria-label="input"
+                aria-describedby="inputGroup-sizing-default">
+    </div>
+    <div class="text-success">
+        <c:if test="${temp.signUpEmailError == false}">
+            <p>
+                <fmt:message key="signUp.email.info"/>
+            </p>
+        </c:if>
+    </div>
+    <div class="text-danger">
+        <c:if test="${temp.signUpEmailError == true}">
+            <p>
+                <fmt:message key="signUp.email.identity.error"/>
+            </p>
+        </c:if>
+    </div>
+    <div class="input-group mb-3 mx-auto " style="width: 30rem">
+        <span  class="input-group-text" id="inputGroup3"><fmt:message key="signUp.password"/></span>
+        <input  type="password"  name="password" value="" class="form-control" aria-label="input"
+                aria-describedby="inputGroup-sizing-default">
+    </div>
+    <div class="text-success">
+        <c:if test="${temp.signUpDataError == false}">
+            <p>
+                <fmt:message key="signUp.password.info"/>
+            </p>
+        </c:if>
+    </div>
+    <div class="text-danger">
+        <c:if test="${temp.signUpDataError == true}">
+            <p>
+                <fmt:message key="login.password.info"/>
+            </p>
+        </c:if>
+    </div>
+    <button type="submit" class="btn btn-primary"><fmt:message key="signUp.submit"/></button>-->

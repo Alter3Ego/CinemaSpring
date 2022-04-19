@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>User</title>
+</head>
+<div th:insert="header"></div>
+
+<body class="text-center" style="background-color: #7cb5bd">
+<h3 th:text="#{user.title.profile}">user.title.profile</h3>
+<p th:text="#{user.firstName} +': ' + ${user.firstName}">firstName</p>
+<p th:text="#{user.lastName} +': ' + ${user.lastName}">firstName</p>
+<p th:text="#{user.email} +': ' + ${user.email}">firstName</p>
+<p th:text="#{user.balance} +': ' + ${user.balance} + ' ' + #{user.UAH}">firstName</p>
+<h3 th:text="#{user.replenish}">replenish</h3>
+
+<form method="post" th:action="@{/userPage}">
+    <input type="number" th:value="updateBalance" name="updateBalance" value="" style="width: 22rem"
+           class="form-control mx-auto"
+           id="addMoney">
+    <div style="color: red" th:if="${updateError}" th:text="#{user.error.replenish}">Name error</div>
+    <button type="submit" class="btn btn-primary align-center" th:text="#{user.submit}">user.submit</button>
+</form>
+
+</body>
+</html>
