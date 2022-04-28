@@ -29,16 +29,16 @@
                         <button class="btn btn-outline-success" type="submit" th:text="#{header.search}">Search</button>
                     </form>
 
-                          <li sec:authorize="hasRole('ROLE_ADMIN')" class="nav-item dropdown">
-                              <a class="nav-link dropdown-toggle" href="#" id="Admin" role="button"
-                                 data-bs-toggle="dropdown" aria-expanded="false">
-                                  Admin
-                              </a>
-                              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                  <li><a class="dropdown-item" href="/admin/addSession" th:text="#{admin.addSession}"
-                                     >Add session</a></li>
-                              </ul>
-                          </li>
+                    <li sec:authorize="hasRole('ROLE_ADMIN')" class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="Admin" role="button"
+                           data-bs-toggle="dropdown" aria-expanded="false">
+                            Admin
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="/admin/session" th:text="#{admin.addSession}"
+                            >Add session</a></li>
+                        </ul>
+                    </li>
 
                 </ul>
 
@@ -74,7 +74,8 @@
                     </div>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                           data-bs-toggle="dropdown" aria-expanded="false" th:text="${#strings.toUpperCase(#locale.getLanguage())}">
+                           data-bs-toggle="dropdown" aria-expanded="false"
+                           th:text="${#strings.toUpperCase(#locale.getLanguage())}">
                             Current language
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">

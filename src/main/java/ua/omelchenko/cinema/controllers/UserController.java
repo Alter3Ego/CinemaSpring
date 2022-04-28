@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import ua.omelchenko.cinema.entity.User;
 import ua.omelchenko.cinema.service.UserService;
 
+import java.math.BigDecimal;
 import java.util.Optional;
 
 @Log4j2
@@ -32,11 +33,12 @@ public class UserController {
     }
 
     @PostMapping("/userPage")
-    public String updateBalance(@ModelAttribute("updateBalance") String sum, Model model) {
-        if (!userService.updateBalance(sum)) {
-            model.addAttribute("updateError", "{user.error.replenish}");
-            return userPage(model);
+    public String updateBalance(@ModelAttribute("updateBalance") BigDecimal sum, Model model) {
+        if (sum.compareTo(BigDecimal.valueOf(0)) > 0 && userService.updateBalance(sum)) {
+            return "redirect:/userPage";
         }
-        return "redirect:/userPage";
+        model.addAttribute("updateError", "{user.error.replenish}");
+        return userPage(model);
+
     }
 }

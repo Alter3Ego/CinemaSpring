@@ -12,23 +12,22 @@
     <div class="mb-3">
         <label class="form-label" th:text="#{login.email}">login.email</label>
         <div class="input-group mb-3 mx-auto " style="width: 30rem">
-            <input name="username" placeholder="Email" autofocus="true" type="email" class="form-control" id="email"  aria-label="input"
-                    aria-describedby="inputGroup-sizing-default">
+            <input name="username" placeholder="Email" autofocus="true" type="email" class="form-control" id="email"
+                   aria-label="input"
+                   aria-describedby="inputGroup-sizing-default">
         </div>
     </div>
     <div class="mb-3">
         <label class="form-label" th:text="#{login.password}">login.email</label>
         <div class="input-group mb-3 mx-auto " style="width: 30rem">
-            <input name="password" placeholder="Password" autofocus="true" type="password" class="form-control" id="password"  aria-label="input"
+            <input name="password" placeholder="Password" autofocus="true" type="password" class="form-control"
+                   id="password" aria-label="input"
                    aria-describedby="inputGroup-sizing-default">
 
         </div>
         <div style="color: red" th:if="${param.error}" th:text="#{login.error.message}">error</div>
     </div>
-
-
-    <button type="submit" class="btn btn-primary align-center" th:text="#{login.email}">login.submit</button>
-
+    <button type="submit" class="btn btn-primary align-center" th:text="#{login.submit}">login.submit</button>
 </form>
 
 </body>

@@ -1,0 +1,59 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<!DOCTYPE html>
+<head>
+    <title>Admin page</title>
+    <link href="https://www.jqueryscript.net/css/jquerysctipttop.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="/css/bootstrap-datetimepicker.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+</head>
+<div th:insert="header"></div>
+<body class="text-center" style="background-color: #7cb5bd">
+
+<h2 th:text="#{addSession.title}">addSession.title</h2>
+
+<form name="addSessionForm" method="POST" th:action="@{/admin/session}" th:object="${session}">
+
+    <div class="mb-3">
+        <label for="dateTime" class="form-label"><h3 th:text="#{addSession.dateTime.label}">
+            addSession.dateTime.label</h3></label>
+        <div style="width: 27rem" class="container">
+            <div id="carbon-block"></div>
+            <div class="jquery-script-ads"></div>
+            <input th:field="*{dateTime}" id="dateTime" name="dateTime" type="text" class="form-control form_datetime2">
+        </div>
+    </div>
+    <div class="mb-3">
+        <div style="width: 27rem" class="form-group  mx-auto">
+            <label for="film"><h3 th:text="#{addSession.film.label}">addSession.film.label</h3></label>
+            <select th:field="*{film}" name="film" class="form-control" id="film">
+                <th:block th:each="film : ${films}">
+                    <option th:value="${film.id}" th:text="${film.title}">film.title</option>
+                </th:block>
+            </select>
+        </div>
+        <div style="color: green" th:if="${successfulAdd}" th:text="#{addSession.successfulAdd}">
+            addSession.successfulAdd
+        </div>
+        <div style="color: red" th:if="${errorDB}" th:text="#{addSession.errorAdding}">addSession.errorAdding</div>
+    </div>
+    <button type="submit" class="btn btn-primary align-center" th:text="#{addSession.create.button}">
+        addSession.create.button
+    </button>
+</form>
+
+<script src="https://code.jquery.com/jquery-3.6.0.slim.min.js"></script>
+<script src="/js/bootstrap-datetimepicker.js"></script>
+<script type="text/javascript">
+    $(".form_datetime2").datetimepicker({
+        format: "yyyy-mm-dd HH:mm",
+        autoclose: true,
+        todayBtn: true,
+        startDate: "2022-03-28 10:00",
+        minuteStep: 10,
+    });
+    $('#datetimepicker').datetimepicker();
+</script>
+</body>
+</html>

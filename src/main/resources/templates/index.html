@@ -1,25 +1,151 @@
-
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
 >
 <head>
-    <title>Главная</title>
+    <title>Cinema Main</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 </head>
 <div th:insert="header"></div>
-<body>
+<body style="background-color: #7cb5bd">
 <div>
-    <h3>${pageContext.request.userPrincipal.name}</h3>
-    <sec:authorize access="!isAuthenticated()">
-        <h4><a href="/login">Войти</a></h4>
-        <h4><a href="/registration">Зарегистрироваться</a></h4>
-    </sec:authorize>
-    <sec:authorize access="isAuthenticated()">
-        <h4><a href="/logout">Выйти</a></h4>
-    </sec:authorize>
-    <h4><a href="/news">Новости (только пользователь)</a></h4>
-    <h4><a href="/admin">Пользователи (только админ)</a></h4>
+    <a href="/?sort=dateTime" class="btn btn-primary my-2" th:text="#{index.sort.datetime}">index.sort.datetime</a>
+    <a href="/?sort=name" class="btn btn-primary my-2 " th:text="#{index.sort.name}">index.sort.name</a>
+    <a href="/?sort=places" class="btn btn-primary my-2" th:text="#{index.sort.places}">index.sort.places</a>
+
+    <a class="nav-link dropdown-toggle" href="#" id="Admin" role="button"
+       data-bs-toggle="dropdown" aria-expanded="false">
+        <span th:if="${session.limitPlaces == false || session.limitPlaces == null}" th:text="#{index.allSession}">index.allSession </span>
+        <span th:if="${session.limitPlaces == true}" th:text="#{index.limitSession}">index.limitSession </span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+        <li><a class="dropdown-item"
+               href="/?limitPlaces=true" th:text="#{index.limitSession}">index.limitSession</a></li>
+        <li><a class="dropdown-item"
+               href="/?limitPlaces=false" th:text="#{index.allSession}">index.allSession </a></li>
+    </ul>
 </div>
+
+<div th:if="${mainCell1 == null}">
+    <h1 th:text="#{index.sort.sorry}">index.sort.sorry</h1>
+
+</div>
+<div class="row mb-2">
+
+    <div class="col-md-6">
+        <div th:if="${mainCell1 != null}">
+            <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+                <div class="col-auto d-none d-lg-block">
+                    <img class="bd-placeholder-img" width="200" height="250"
+                         th:src="'images/img' + ${mainCell1.film.id}+'.jpg'">
+                </div>
+                <div class="col p-4 d-flex flex-column position-static">
+                    <a th:href="@{/session/{id}(id=${mainCell1.id})}" class="stretched-link">
+                        <h3 class="mb-0 text-center"
+                            th:text="${#calendars.format(mainCell1.dateTime,  'dd-MM-yyyy HH:mm')}"
+                        >dateTime</h3></a>
+                    <h4 th:text="${mainCell1.film.title} + ' ' + ${mainCell1.film.releaseYear}"> title</h4>
+                    <p class="card-text mb-auto"><h6
+                        th:text="#{index.session.director} + ' ' + ${mainCell1.film.producer}">producer</h6>
+                    <p class="card-text mb-auto"><h6 th:text="#{index.session.genre} + ' ' + ${mainCell1.film.genre}">
+                    genre</h6>
+                    <p class="card-text mb-auto"><h6
+                        th:text="#{index.session.price} + ' ' + ${mainCell1.film.price} + ' ' + #{index.session.UAH}">
+                    price</h6>
+                    <p th:text="#{index.freePlaces} + ' ' + ${20 - mainCell1.numberOfTickets}"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div th:if="${mainCell2 != null}">
+
+            <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+                <div class="col-auto d-none d-lg-block">
+                    <img class="bd-placeholder-img" width="200" height="250"
+                         th:src="'images/img' + ${mainCell2.film.id}+'.jpg'">
+                </div>
+                <div class="col p-4 d-flex flex-column position-static">
+                    <a th:href="@{/session/{id}(id=${mainCell2.id})}" class="stretched-link">
+                        <h3 class="mb-0 text-center"
+                            th:text="${#calendars.format(mainCell2.dateTime,  'dd-MM-yyyy HH:mm')}"
+                        >dateTime</h3></a>
+                    <h4 th:text="${mainCell2.film.title} + ' ' + ${mainCell2.film.releaseYear}"> title</h4>
+                    <p class="card-text mb-auto"><h6
+                        th:text="#{index.session.director} + ' ' + ${mainCell2.film.producer}">producer</h6>
+                    <p class="card-text mb-auto"><h6 th:text="#{index.session.genre} + ' ' + ${mainCell2.film.genre}">
+                    genre</h6>
+                    <p class="card-text mb-auto"><h6
+                        th:text="#{index.session.price} + ' ' + ${mainCell2.film.price} + ' ' + #{index.session.UAH}">
+                    price</h6>
+                    <p th:text="#{index.freePlaces} + ' ' + ${20 - mainCell2.numberOfTickets}"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row mb-2">
+
+    <div class="col-md-6">
+        <div th:if="${mainCell3 != null}">
+            <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+                <div class="col-auto d-none d-lg-block">
+                    <img class="bd-placeholder-img" width="200" height="250"
+                         th:src="'images/img' + ${mainCell3.film.id}+'.jpg'">
+                </div>
+                <div class="col p-4 d-flex flex-column position-static">
+                    <a th:href="@{/session/{id}(id=${mainCell3.id})}" class="stretched-link">
+                        <h3 class="mb-0 text-center"
+                            th:text="${#calendars.format(mainCell3.dateTime,  'dd-MM-yyyy HH:mm')}"
+                        >dateTime</h3></a>
+                    <h4 th:text="${mainCell3.film.title} + ' ' + ${mainCell3.film.releaseYear}"> title</h4>
+                    <p class="card-text mb-auto"><h6
+                        th:text="#{index.session.director} + ' ' + ${mainCell3.film.producer}">producer</h6>
+                    <p class="card-text mb-auto"><h6 th:text="#{index.session.genre} + ' ' + ${mainCell3.film.genre}">
+                    genre</h6>
+                    <p class="card-text mb-auto"><h6
+                        th:text="#{index.session.price} + ' ' + ${mainCell3.film.price} + ' ' + #{index.session.UAH}">
+                    price</h6>
+                    <p th:text="#{index.freePlaces} + ' ' + ${20 - mainCell3.numberOfTickets}"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div th:if="${mainCell4 != null}">
+
+            <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+                <div class="col-auto d-none d-lg-block">
+                    <img class="bd-placeholder-img" width="200" height="250"
+                         th:src="'images/img' + ${mainCell4.film.id}+'.jpg'">
+                </div>
+                <div class="col p-4 d-flex flex-column position-static">
+                    <a th:href="@{/session/{id}(id=${mainCell4.id})}" class="stretched-link">
+                        <h3 class="mb-0 text-center"
+                            th:text="${#calendars.format(mainCell4.dateTime,  'dd-MM-yyyy HH:mm')}"
+                        >dateTime</h3></a>
+                    <h4 th:text="${mainCell4.film.title} + ' ' + ${mainCell4.film.releaseYear}"> title</h4>
+                    <p class="card-text mb-auto"><h6
+                        th:text="#{index.session.director} + ' ' + ${mainCell4.film.producer}">producer</h6>
+                    <p class="card-text mb-auto"><h6 th:text="#{index.session.genre} + ' ' + ${mainCell4.film.genre}">
+                    genre</h6>
+                    <p class="card-text mb-auto"><h6
+                        th:text="#{index.session.price} + ' ' + ${mainCell4.film.price} + ' ' + #{index.session.UAH}">
+                    price</h6>
+                    <p th:text="#{index.freePlaces} + ' ' + ${20 - mainCell4.numberOfTickets}"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="text-center">
+
+    <a th:if="${previousPage != null}" th:href="'/?' + ${previousPage}" th:text="#{index.navigation.back}"
+       class="btn btn-primary my-2">&#8592;</a>
+
+    <a th:if="${nextPage != null}" th:href="'/?' + ${nextPage}" th:text="#{index.navigation.next}"
+       class="btn btn-primary my-2">&#8592;</a>
+
+</div>
+
 </body>
 </html>

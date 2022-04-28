@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+>
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <title>Session</title>
+</head>
+
+<div th:insert="header"></div>
+<body class="text-center" style="background-color: #7cb5bd">
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-4">
+            <img class="bd-placeholder-img" width="400" height="500"
+                 th:src="'../images/img' + ${currentSession.film.id}+'.jpg'">
+        </div>
+        <div class="col-md-4" id="parent">
+
+            <h3 class="mb-0 text-center" th:text="${#calendars.format(currentSession.dateTime,  'dd-MM-yyyy HH:mm')}">
+                dateTime</h3>
+            <h4 th:text="${currentSession.film.title} + ' ' + ${currentSession.film.releaseYear}"> title</h4>
+            <p class="card-text mb-auto"><h6
+                th:text="#{index.session.director} + ' ' + ${currentSession.film.producer}">producer</h6>
+            <p class="card-text mb-auto"><h6 th:text="#{index.session.genre} + ' ' + ${currentSession.film.genre}">
+            genre</h6>
+            <p class="card-text mb-auto"><h6
+                th:text="#{index.session.price} + ' ' + ${currentSession.film.price} + ' ' + #{index.session.UAH}">
+            price</h6>
+            <p th:text="#{index.freePlaces} + ' ' + ${20 - currentSession.numberOfTickets}"></p>
+            <br>
+            <button
+                    class="btn-primary" id="buy" th:text="#{session.submit}">Upvote
+            </button>
+            <div style="color: red" th:if="${errorLogInSession}" th:text="#{session.login.error}">session.login.error
+            </div>
+            <div style="color: red" th:if="${errorBalance}" th:text="#{session.balance.error}">session.login.error</div>
+            <div style="color: red" th:if="${operationError}" th:text="#{session.operation.error}">session.login.error
+            </div>
+        </div>
+
+        <div sec:authorize="hasRole('ROLE_ADMIN')" class="col-md-4">
+            <form th:method="DELETE" th:action="@{/admin/session/delete}">
+                <input type="hidden" th:name="session" th:value="${currentSession.getId()}">
+                <button class="btn btn-danger" type="submit" th:text="#{session.remove.button}">session.remove.button
+                </button>
+            </form>
+
+        </div>
+
+        <script th:inline="javascript">
+            $(document).ready(function () {
+                let tickets = [];
+
+                let url = window.location.pathname;
+
+
+                let places = document.createElement('div');
+                let parent = document.querySelector('#parent');
+                let buy = document.getElementById('buy');
+                places.classList.add('p-3');
+                let hq = [[#{session.buy.tickets}]];
+                places.innerHTML = "<h1>" + hq + "</h1>";
+                let user = [[${isAuthentication}]];
+                let placesInfo = [[${places}]];
+
+
+                parent.insertBefore(places, buy);
+
+                for (let i = 0; i <= 15; i += 5) {
+                    for (let j = 1; j <= 5; j++) {
+                        let placeNumber = i + j;
+                        console.log(placeNumber);
+                        let userId = placesInfo[placeNumber];
+                        let button;
+                        if (userId) {
+                            if (userId === user) {
+                                button = generateAlreadyByedButton(placeNumber);
+
+                            } else {
+                                button = generateButton(placeNumber);
+                            }
+                            button.disabled = true;
+                        } else {
+                            button = generateAvailableButton(placeNumber);
+                        }
+                        console.log(button);
+                        places.appendChild(button);
+
+                    }
+
+                    let br = document.createElement('br');
+                    places.appendChild(br);
+                }
+
+                function generateButton(place) {
+                    let button = document.createElement('button');
+                    button.style.height = '30px';
+                    button.style.width = '30px';
+                    button.textContent = "" + place;
+                    button.id = "place" + place;
+                    button.onclick = () => changeValue(button.id, place);
+                    return button;
+                }
+
+                function generateAvailableButton(place) {
+                    let button = generateButton(place);
+                    button.classList.add('btn-primary');
+                    return button;
+                }
+
+                function generateAlreadyByedButton(place) {
+                    let button = generateButton(place);
+                    button.classList.add('btn-success');
+                    return button;
+
+                }
+
+
+                $("#buy").click(function () {
+                    $.ajax({
+                        type: "POST",
+                        url: url,
+                        data: JSON.stringify(tickets),
+                        contentType: 'application/json',
+                        success: function (resp) {
+                            document.open();
+                            document.write(resp);
+                            document.close();
+                            //window.location.href = window.location.href;
+                        }
+                    });
+
+                });
+
+
+                function changeValue(id, placeNumber) {
+
+                    let button = document.getElementById(id);
+                    if (button.classList.contains('btn-primary')) {
+                        button.classList.remove('btn-primary');
+                        button.classList.add('btn-warning');
+                        tickets.push(placeNumber);
+                        console.log(tickets);
+                    } else {
+                        button.classList.remove('btn-warning');
+                        button.classList.add('btn-primary');
+                        removeA(tickets, placeNumber);
+                        console.log(tickets);
+                    }
+
+                }
+
+
+                function removeA(arr) {
+                    var what, a = arguments, L = a.length, ax;
+                    while (L > 1 && arr.length) {
+                        what = a[--L];
+                        while ((ax = arr.indexOf(what)) !== -1) {
+                            arr.splice(ax, 1);
+                        }
+                    }
+                    return arr;
+                }
+
+            });
+
+        </script>
+
+    </div>
+</div>
+</body>
+</html>

@@ -1,7 +1,6 @@
 package ua.omelchenko.cinema.controllers;
 
 import lombok.extern.log4j.Log4j2;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -12,12 +11,16 @@ import ua.omelchenko.cinema.entity.User;
 import ua.omelchenko.cinema.service.UserService;
 
 import javax.validation.Valid;
+
 @Log4j2
 @Controller
 public class RegistrationController {
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
+
+    public RegistrationController(UserService userService) {
+        this.userService = userService;
+    }
 
     @GetMapping("/registration")
     public String registration(Model model) {
@@ -28,13 +31,12 @@ public class RegistrationController {
 
     @PostMapping("/registration")
     public String addUser(@ModelAttribute("user") @Valid User user, BindingResult bindingResult, Model model) {
-        if (bindingResult.hasErrors()) {
-            return "registration";
+        if (!bindingResult.hasErrors()) {
+            if (!userService.saveUser(user)) {
+                model.addAttribute("emailError", true);
+                return "registration";
+            }
         }
-        if (!userService.saveUser(user)){
-            model.addAttribute("emailError", "{signUp.email.identity.error}");
-            return "registration";
-        }
-        return "redirect:/";
+        return "redirect:login";
     }
 }
