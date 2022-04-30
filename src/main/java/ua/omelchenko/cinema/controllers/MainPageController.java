@@ -7,7 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ua.omelchenko.cinema.entity.Session;
-import ua.omelchenko.cinema.service.SessionService;
+import ua.omelchenko.cinema.service.impl.SessionServiceImpl;
 
 import java.util.List;
 
@@ -15,9 +15,9 @@ import java.util.List;
 @Controller
 public class MainPageController {
 
-    private final SessionService sessionService;
+    private final SessionServiceImpl sessionService;
 
-    public MainPageController(SessionService sessionService) {
+    public MainPageController(SessionServiceImpl sessionService) {
         this.sessionService = sessionService;
     }
 

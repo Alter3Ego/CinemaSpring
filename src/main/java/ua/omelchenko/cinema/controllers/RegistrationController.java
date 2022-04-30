@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import ua.omelchenko.cinema.entity.User;
-import ua.omelchenko.cinema.service.UserService;
+import ua.omelchenko.cinema.service.impl.UserServiceImpl;
 
 import javax.validation.Valid;
 
@@ -16,9 +16,9 @@ import javax.validation.Valid;
 @Controller
 public class RegistrationController {
 
-    private final UserService userService;
+    private final UserServiceImpl userService;
 
-    public RegistrationController(UserService userService) {
+    public RegistrationController(UserServiceImpl userService) {
         this.userService = userService;
     }
 

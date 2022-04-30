@@ -7,9 +7,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ua.omelchenko.cinema.entity.Session;
 import ua.omelchenko.cinema.exception.LowBalanceException;
-import ua.omelchenko.cinema.service.SessionService;
-import ua.omelchenko.cinema.service.TicketService;
-import ua.omelchenko.cinema.service.UserService;
+import ua.omelchenko.cinema.service.impl.SessionServiceImpl;
+import ua.omelchenko.cinema.service.impl.TicketServiceImpl;
+import ua.omelchenko.cinema.service.impl.UserServiceImpl;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,11 +17,11 @@ import java.util.Optional;
 @Log4j2
 @Controller
 public class SessionController {
-    private final SessionService sessionService;
-    private final TicketService ticketService;
-    private final UserService userService;
+    private final SessionServiceImpl sessionService;
+    private final TicketServiceImpl ticketService;
+    private final UserServiceImpl userService;
 
-    public SessionController(SessionService sessionService, TicketService ticketService, UserService userService) {
+    public SessionController(SessionServiceImpl sessionService, TicketServiceImpl ticketService, UserServiceImpl userService) {
         this.sessionService = sessionService;
         this.ticketService = ticketService;
         this.userService = userService;

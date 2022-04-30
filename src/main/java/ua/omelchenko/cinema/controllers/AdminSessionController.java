@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ua.omelchenko.cinema.entity.Film;
 import ua.omelchenko.cinema.entity.Session;
-import ua.omelchenko.cinema.service.FilmService;
-import ua.omelchenko.cinema.service.SessionService;
+import ua.omelchenko.cinema.service.impl.FilmServiceImpl;
+import ua.omelchenko.cinema.service.impl.SessionServiceImpl;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -18,10 +18,10 @@ import java.util.Optional;
 @Log4j2
 @Controller
 public class AdminSessionController {
-    private final SessionService sessionService;
-    private final FilmService filmService;
+    private final SessionServiceImpl sessionService;
+    private final FilmServiceImpl filmService;
 
-    public AdminSessionController(SessionService sessionService, FilmService filmService) {
+    public AdminSessionController(SessionServiceImpl sessionService, FilmServiceImpl filmService) {
         this.sessionService = sessionService;
         this.filmService = filmService;
     }

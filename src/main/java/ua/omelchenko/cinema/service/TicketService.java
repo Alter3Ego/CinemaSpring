@@ -1,94 +1,19 @@
 package ua.omelchenko.cinema.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
 import ua.omelchenko.cinema.entity.Session;
 import ua.omelchenko.cinema.entity.Ticket;
-import ua.omelchenko.cinema.entity.User;
 import ua.omelchenko.cinema.exception.LowBalanceException;
-import ua.omelchenko.cinema.jdbc.repository.TicketRepository;
 
-import javax.transaction.Transactional;
-import java.math.BigDecimal;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-@Service
-public class TicketService {
-    @Value("20")
-    private Integer NUMBER_OF_PLACES;
+public interface TicketService {
+    Map<Integer, Long> getPlaces(Session session);
 
-    final TicketRepository ticketRepository;
+    void addTickets(List<Integer> places, Long sessionId) throws LowBalanceException;
 
-    @Autowired
-    private UserService userService;
+    Optional<List<Ticket>> getTicketsBySessionId(Session session);
 
-    @Autowired
-    private SessionService sessionService;
-
-
-    @Autowired
-    public TicketService(TicketRepository ticketRepository) {
-        this.ticketRepository = ticketRepository;
-    }
-
-    public Map<Integer, Long> getPlaces(Session session) {
-        Optional<List<Ticket>> optionalTicket = ticketRepository.findAllBySessionId(session);
-        Map<Integer, Long> places = new HashMap<>();
-        if (optionalTicket.isPresent()) {
-            for (Ticket ticket : optionalTicket.get()) {
-                places.put(ticket.getPlace(), ticket.getUserId().getId());
-            }
-        }
-        return places;
-    }
-
-    @Transactional
-    public void addTickets(List<Integer> places, Long sessionId) throws LowBalanceException {
-        Optional<User> userOptional = userService.getCurrentUser();
-        Optional<Session> sessionOptional = sessionService.getSessionById(sessionId);
-        if (userOptional.isPresent() && sessionOptional.isPresent()) {
-            int numberOfPlaces = places.size();
-            User user = userOptional.get();
-            Session session = sessionOptional.get();
-            BigDecimal price = session
-                    .getFilm().getPrice()
-                    .multiply(BigDecimal.valueOf(numberOfPlaces));
-            if (user.getBalance().compareTo(price) >= 0) {
-                for (int place : places) {
-                    Ticket ticket = new Ticket();
-                    ticket.setPlace(place);
-                    ticket.setUserId(user);
-                    ticket.setSessionId(session);
-                    ticketRepository.save(ticket);
-                }
-                userService.updateBalance(price.negate());
-                sessionService.updateNumberOfTickets(numberOfPlaces, session);
-
-            } else {
-                throw new LowBalanceException();
-            }
-        }
-
-    }
-
-    public Optional<List<Ticket>> getTicketsBySessionId(Session session) {
-        return ticketRepository.findAllBySessionId(session);
-    }
-
-    @Transactional
-    public void removeTicketsBySession(Session session) {
-        Optional<List<Ticket>> optionalTickets = getTicketsBySessionId(session);
-        if (optionalTickets.isPresent()) {
-            List<Ticket> tickets = optionalTickets.get();
-            for (Ticket ticket : tickets) {
-                userService.updateBalance(session.getFilm().getPrice(), ticket.getUserId());
-                ticketRepository.delete(ticket);
-            }
-        }
-    }
-
+    void removeTicketsBySession(Session session);
 }

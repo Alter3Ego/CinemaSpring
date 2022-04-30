@@ -8,16 +8,15 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import ua.omelchenko.cinema.service.UserService;
-
+import ua.omelchenko.cinema.service.impl.UserServiceImpl;
 
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     final
-    UserService userService;
+    UserServiceImpl userService;
 
-    public WebSecurityConfig(UserService userService) {
+    public WebSecurityConfig(UserServiceImpl userService) {
         this.userService = userService;
     }
 
