@@ -31,7 +31,7 @@
 
                     <li sec:authorize="hasRole('ROLE_ADMIN')" class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="Admin" role="button"
-                           data-bs-toggle="dropdown" aria-expanded="false">
+                           data-bs-toggle="dropdown" aria-expanded="false" th:text="#{header.admin}">
                             Admin
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
