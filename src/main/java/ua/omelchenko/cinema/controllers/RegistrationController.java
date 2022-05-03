@@ -34,10 +34,10 @@ public class RegistrationController {
         if (!bindingResult.hasErrors()) {
             if (!userService.saveUser(user)) {
                 model.addAttribute("emailError", true);
-                return "redirect:login";
+                return "registration";
             }
+            return "redirect:login";
         }
         return "registration";
-
     }
 }
