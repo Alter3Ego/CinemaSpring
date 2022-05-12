@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
->
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <title>Session</title>
@@ -29,13 +28,16 @@
             price</h6>
             <p th:text="#{index.freePlaces} + ' ' + ${20 - currentSession.numberOfTickets}"></p>
             <br>
-            <button
-                    class="btn-primary" id="buy" th:text="#{session.submit}">Upvote
-            </button>
-            <div style="color: red" th:if="${errorLogInSession}" th:text="#{session.login.error}">session.login.error
+            <form id="requestForm" action="#" th:action="@{/session/{id}(id=${currentSession.id})}" method="post">
+                <button type="button"
+                        class="btn-primary" id="buy" th:text="#{session.submit}">Upvote
+                </button>
+            </form>
+
+            <div style="color: red" th:if="${param.errorLogInSession}" th:text="#{session.login.error}">session.login.error
             </div>
-            <div style="color: red" th:if="${errorBalance}" th:text="#{session.balance.error}">session.login.error</div>
-            <div style="color: red" th:if="${operationError}" th:text="#{session.operation.error}">session.login.error
+            <div style="color: red" th:if="${param.errorBalance}" th:text="#{session.balance.error}">session.login.error</div>
+            <div style="color: red" th:if="${param.operationError}" th:text="#{session.operation.error}">session.login.error
             </div>
         </div>
 
@@ -52,12 +54,9 @@
             $(document).ready(function () {
                 let tickets = [];
 
-                let url = window.location.pathname;
-
-
                 let places = document.createElement('div');
                 let parent = document.querySelector('#parent');
-                let buy = document.getElementById('buy');
+                let formElement = document.getElementById('requestForm');
                 places.classList.add('p-3');
                 let hq = [[#{session.buy.tickets}]];
                 places.innerHTML = "<h1>" + hq + "</h1>";
@@ -65,7 +64,7 @@
                 let placesInfo = [[${places}]];
 
 
-                parent.insertBefore(places, buy);
+                parent.insertBefore(places, formElement);
 
                 for (let i = 0; i <= 15; i += 5) {
                     for (let j = 1; j <= 5; j++) {
@@ -118,21 +117,15 @@
 
 
                 $("#buy").click(function () {
-                    $.ajax({
-                        type: "POST",
-                        url: url,
-                        data: JSON.stringify(tickets),
-                        contentType: 'application/json',
-                        success: function (resp) {
-                            document.open();
-                            document.write(resp);
-                            document.close();
-                            //window.location.href = window.location.href;
-                        }
-                    });
-
+                    tickets.forEach(ticket => {
+                        $('<input>').attr({
+                            type: 'hidden',
+                            name: 'tickets',
+                            value: ticket
+                        }).appendTo('#requestForm');
+                    })
+                    $("#requestForm").submit();
                 });
-
 
                 function changeValue(id, placeNumber) {
 
@@ -141,19 +134,16 @@
                         button.classList.remove('btn-primary');
                         button.classList.add('btn-warning');
                         tickets.push(placeNumber);
-                        console.log(tickets);
                     } else {
                         button.classList.remove('btn-warning');
                         button.classList.add('btn-primary');
                         removeA(tickets, placeNumber);
-                        console.log(tickets);
                     }
-
                 }
 
 
                 function removeA(arr) {
-                    var what, a = arguments, L = a.length, ax;
+                    let what, a = arguments, L = a.length, ax;
                     while (L > 1 && arr.length) {
                         what = a[--L];
                         while ((ax = arr.indexOf(what)) !== -1) {

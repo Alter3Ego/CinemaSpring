@@ -1,4 +1,4 @@
-package ua.omelchenko.cinema.jdbc.repository;
+package ua.omelchenko.cinema.repository;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -7,9 +7,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import ua.omelchenko.cinema.entity.Session;
-import ua.omelchenko.cinema.entity.User;
 
-import java.math.BigDecimal;
 import java.util.Optional;
 
 @Repository
@@ -19,7 +17,7 @@ public interface SessionRepository extends JpaRepository<Session, Long> {
     Optional<Session> findById(long sessionId);
 
     @Modifying
-    @Query(value = "UPDATE sessions SET number_of_tickets = number_of_tickets + ?  WHERE id = ?", nativeQuery = true)
-    int updateNumberOfTickets(int places, Session session);
+    @Query(value = "UPDATE sessions SET number_of_tickets = ? WHERE id = ?", nativeQuery = true)
+    void updateNumberOfTickets(int places, Session session);
 
 }

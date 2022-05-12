@@ -10,8 +10,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import ua.omelchenko.cinema.entity.Role;
 import ua.omelchenko.cinema.entity.User;
-import ua.omelchenko.cinema.jdbc.repository.RoleRepository;
-import ua.omelchenko.cinema.jdbc.repository.UserRepository;
+import ua.omelchenko.cinema.repository.RoleRepository;
+import ua.omelchenko.cinema.repository.UserRepository;
 import ua.omelchenko.cinema.service.UserService;
 
 import javax.transaction.Transactional;

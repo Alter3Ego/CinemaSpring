@@ -1,6 +1,5 @@
 package ua.omelchenko.cinema.service.impl;
 
-import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -10,7 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import ua.omelchenko.cinema.entity.Session;
-import ua.omelchenko.cinema.jdbc.repository.SessionRepository;
+import ua.omelchenko.cinema.repository.SessionRepository;
 import ua.omelchenko.cinema.service.SessionService;
 
 import javax.servlet.http.HttpSession;
@@ -68,8 +67,8 @@ public class SessionServiceImpl implements SessionService {
         if (!Objects.isNull(httpSession.getAttribute("sort"))) {
             paginationSort = (String) httpSession.getAttribute("sort");
         }
-        int pageNumber;
-        pageNumber = !Objects.isNull(page) ? page : 0;
+
+        int pageNumber = !Objects.isNull(page) ? page : 0;
         Pageable pageable = PageRequest.of(pageNumber, NUMBERS_OF_CELLS, Sort.by(paginationSort));
 
         return sessionRepository.findAllByNumberOfTicketsIsLessThan(limit ? HALL_CAPACITY : HALL_OVER_CAPACITY, pageable);

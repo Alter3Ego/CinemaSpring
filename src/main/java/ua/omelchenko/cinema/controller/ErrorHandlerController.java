@@ -1,4 +1,4 @@
-package ua.omelchenko.cinema.controllers;
+package ua.omelchenko.cinema.controller;
 
 import lombok.extern.log4j.Log4j2;
 import org.springframework.boot.web.servlet.error.ErrorController;
@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 
 @Log4j2
 @Controller
-public class ErrorHandler implements ErrorController {
+public class ErrorHandlerController implements ErrorController {
 
     @RequestMapping("/error")
     public String handleError(HttpServletRequest request) {

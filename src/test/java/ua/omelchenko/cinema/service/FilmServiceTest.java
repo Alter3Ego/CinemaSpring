@@ -7,7 +7,7 @@ import org.mockito.Mock;
 
 import org.mockito.junit.jupiter.MockitoExtension;
 import ua.omelchenko.cinema.entity.Film;
-import ua.omelchenko.cinema.jdbc.repository.FilmRepository;
+import ua.omelchenko.cinema.repository.FilmRepository;
 import ua.omelchenko.cinema.service.impl.FilmServiceImpl;
 
 import java.math.BigDecimal;

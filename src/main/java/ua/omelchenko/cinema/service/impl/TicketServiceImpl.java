@@ -1,21 +1,20 @@
 package ua.omelchenko.cinema.service.impl;
 
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ua.omelchenko.cinema.entity.Session;
 import ua.omelchenko.cinema.entity.Ticket;
 import ua.omelchenko.cinema.entity.User;
 import ua.omelchenko.cinema.exception.LowBalanceException;
-import ua.omelchenko.cinema.jdbc.repository.TicketRepository;
+import ua.omelchenko.cinema.repository.TicketRepository;
 import ua.omelchenko.cinema.service.TicketService;
 
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
+@Log4j2
 @Service
 public class TicketServiceImpl implements TicketService {
 
@@ -25,13 +24,13 @@ public class TicketServiceImpl implements TicketService {
 
     private final SessionServiceImpl sessionService;
 
-
     @Autowired
     public TicketServiceImpl(TicketRepository ticketRepository, UserServiceImpl userService, SessionServiceImpl sessionService) {
         this.ticketRepository = ticketRepository;
         this.userService = userService;
         this.sessionService = sessionService;
     }
+
     @Override
     public Map<Integer, Long> getPlaces(Session session) {
         Optional<List<Ticket>> optionalTicket = ticketRepository.findAllBySessionId(session);
@@ -43,6 +42,7 @@ public class TicketServiceImpl implements TicketService {
         }
         return places;
     }
+
     @Override
     @Transactional
     public void addTickets(List<Integer> places, Long sessionId) throws LowBalanceException {
@@ -56,26 +56,28 @@ public class TicketServiceImpl implements TicketService {
                     .getFilm().getPrice()
                     .multiply(BigDecimal.valueOf(numberOfPlaces));
             if (user.getBalance().compareTo(price) >= 0) {
+                List<Ticket> toSave = new ArrayList<>();
                 for (int place : places) {
                     Ticket ticket = new Ticket();
                     ticket.setPlace(place);
                     ticket.setUserId(user);
                     ticket.setSessionId(session);
-                    ticketRepository.save(ticket);
+                    toSave.add(ticket);
                 }
+                ticketRepository.saveAll(toSave);
                 userService.updateBalance(price.negate());
-                sessionService.updateNumberOfTickets(numberOfPlaces, session);
-
+                sessionService.updateNumberOfTickets(numberOfPlaces + session.getNumberOfTickets(), session);
             } else {
                 throw new LowBalanceException();
             }
         }
-
     }
+
     @Override
     public Optional<List<Ticket>> getTicketsBySessionId(Session session) {
         return ticketRepository.findAllBySessionId(session);
     }
+
     @Override
     @Transactional
     public void removeTicketsBySession(Session session) {

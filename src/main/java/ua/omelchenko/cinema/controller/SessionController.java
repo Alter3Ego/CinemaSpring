@@ -1,10 +1,11 @@
-package ua.omelchenko.cinema.controllers;
+package ua.omelchenko.cinema.controller;
 
 import lombok.extern.log4j.Log4j2;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ua.omelchenko.cinema.entity.Session;
 import ua.omelchenko.cinema.exception.LowBalanceException;
 import ua.omelchenko.cinema.service.impl.SessionServiceImpl;
@@ -30,7 +31,6 @@ public class SessionController {
     @GetMapping("/session/{id}")
     public String sessionPage(@PathVariable("id") long id, Model model) {
         Optional<Session> optionalSession = sessionService.getSessionById(id);
-
         if (optionalSession.isPresent()) {
             Session session = optionalSession.get();
             model.addAttribute("currentSession", session);
@@ -47,21 +47,24 @@ public class SessionController {
     }
 
     @PostMapping("/session/{id}")
-    public String buyTickets(@PathVariable("id") long id, @RequestBody List<Integer> tickets, Model model) {
+    public String buyTickets(@PathVariable("id") long id,
+                             @RequestParam(value = "tickets", required=false) List<Integer> tickets,
+                             RedirectAttributes redirectAttributes) {
+        log.warn(tickets);
         if (userService.isAuthentication()) {
-            if (tickets.size() != 0) {
+            if (tickets != null && tickets.size() != 0) {
                 try {
                     ticketService.addTickets(tickets, id);
                 } catch (LowBalanceException e) {
-                    model.addAttribute("errorBalance", true);
+                    redirectAttributes.addAttribute("errorBalance", true);
                 } catch (DataIntegrityViolationException ex) {
                     log.error(ex);
-                    model.addAttribute("operationError", true);
+                    redirectAttributes.addAttribute("operationError", true);
                 }
             }
         } else {
-            model.addAttribute("errorLogInSession", true);
+            redirectAttributes.addAttribute("errorLogInSession", true);
         }
-        return sessionPage(id, model);
+        return "redirect:/session/" + id;
     }
 }

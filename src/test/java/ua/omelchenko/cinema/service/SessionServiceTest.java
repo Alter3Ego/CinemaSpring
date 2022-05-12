@@ -13,7 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.test.util.ReflectionTestUtils;
 import ua.omelchenko.cinema.entity.Film;
 import ua.omelchenko.cinema.entity.Session;
-import ua.omelchenko.cinema.jdbc.repository.SessionRepository;
+import ua.omelchenko.cinema.repository.SessionRepository;
 import ua.omelchenko.cinema.service.impl.SessionServiceImpl;
 import ua.omelchenko.cinema.service.impl.TicketServiceImpl;
 
