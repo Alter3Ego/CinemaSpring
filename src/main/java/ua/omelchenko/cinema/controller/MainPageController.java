@@ -41,7 +41,7 @@ public class MainPageController {
             if (page != 0) {
                 model.addAttribute("previousPage", "page=" + (page - 1));
             }
-            if (totalPages != page + 1) {
+            if (totalPages != 0 && totalPages != page + 1) {
                 model.addAttribute("nextPage", "page=" + (page + 1));
             }
         }
