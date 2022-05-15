@@ -1,4 +1,4 @@
 package ua.omelchenko.cinema.exception;
 
-public class LowBalanceException extends Exception{
+public class LowBalanceException extends Exception {
 }
