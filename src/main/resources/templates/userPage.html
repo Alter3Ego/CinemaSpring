@@ -15,7 +15,7 @@
 <h3 th:text="#{user.replenish}">replenish</h3>
 
 <form method="post" th:action="@{/userPage}">
-    <input type="number" th:value="updateBalance" name="updateBalance" value="" style="width: 22rem"
+    <input required type="number" th:value="updateBalance" name="updateBalance" value="" style="width: 22rem"
            class="form-control mx-auto"
            id="addMoney">
     <div style="color: red" th:if="${updateError}" th:text="#{user.error.replenish}">Name error</div>
